@@ -1,3 +1,36 @@
+/* Style pour le header et le menu de navigation */
+header {
+    background-color: #333;
+    padding: 10px 20px;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-left a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.menu-right .btn-connect {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.menu-right .btn-connect:hover {
+    background-color: #218838;
+}
+
+
+
 .listeProduits {
     display: flex;
     flex-wrap: wrap;
@@ -12,6 +45,7 @@
 }
 
 .produit img {
+    border-radius: 10%;
     max-width: 50%;
     height: auto;
 }
