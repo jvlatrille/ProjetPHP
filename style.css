@@ -1,0 +1,43 @@
+.listeProduits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.produit {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+}
+
+.produit img {
+    max-width: 50%;
+    height: auto;
+}
+
+.produit h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.produit p {
+    margin: 10px 0;
+}
+
+.produit .prixProd {
+    font-size: 1.5em;
+    color: #333;
+}
+
+.produit button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.produit button:hover {
+    background-color: #218838;
+}

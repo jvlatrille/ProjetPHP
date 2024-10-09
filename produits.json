@@ -1,0 +1,20 @@
+[
+    {
+        "nomProd": "Saucisson",
+        "prixProd": 10.99,
+        "image": "img/saucisson.png",
+        "description": "Il est mignon et il est bon"
+    },
+    {
+        "nomProd": "JeSUS",
+        "prixProd": 69.69,
+        "image": "img/jeSUS.jpg",
+        "description": "Douteux... mais bon"
+    },
+    {
+        "nomProd": "Lapin riche",
+        "prixProd": 9999.99,
+        "image": "img/lapin.png",
+        "description": "Le lapin le plus stylé du monde"
+    }
+]
