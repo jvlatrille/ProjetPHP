@@ -7,14 +7,20 @@
     },
     {
         "nomProd": "Loutre",
-        "prixProd": 69.69,
+        "prixProd": 9999999.99,
         "image": "img/Loutre.jpg",
-        "description": "Douteux... mais bon"
+        "description": "C'est mignon donc c'est cher"
     },
     {
-        "nomProd": "Lapin riche",
-        "prixProd": 9999.99,
-        "image": "img/lapin.png",
-        "description": "Le lapin le plus stylé du monde"
+        "nomProd": "Kiki",
+        "prixProd": -9.99,
+        "image": "img/kiki.jpg",
+        "description": "On en veut plus, prennez le"
+    },
+    {
+        "nomProd": "Sinje",
+        "prixProd": 999.99,
+        "image": "img/Singe.jpg",
+        "description": "Le plus bô, mais moins mignon que la loutre"
     }
 ]
