@@ -1,0 +1,26 @@
+<produits>
+    <produit>
+        <nomProd>Saucisson</nomProd>
+        <prixProd>10.99</prixProd>
+        <image>img/saucisson.png</image>
+        <description>Il est mignon et il est bon</description>
+    </produit>
+    <produit>
+        <nomProd>Loutre</nomProd>
+        <prixProd>9999999.99</prixProd>
+        <image>img/Loutre.jpg</image>
+        <description>C'est mignon donc c'est cher</description>
+    </produit>
+    <produit>
+        <nomProd>Kiki</nomProd>
+        <prixProd>-9.99</prixProd>
+        <image>img/kiki.jpg</image>
+        <description>On en veut plus, prennez le</description>
+    </produit>
+    <produit>
+        <nomProd>Sinje</nomProd>
+        <prixProd>999.99</prixProd>
+        <image>img/Singe.jpg</image>
+        <description>Le plus bô, mais moins mignon que la loutre</description>
+    </produit>
+</produits>

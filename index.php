@@ -27,20 +27,16 @@
     <p>Plein plein de pitites pilouches à vendre</p>
 
     <?php
-    // Lie le fichier .json
-    $json_data = file_get_contents('produits.json');
+    // Lire le fichier XML
+    $xml = simplexml_load_file('produits.xml');
 
-    // Convertir le JSON en tableau PHP
-    $products = json_decode($json_data, true);
-
-    // Afficher les produits
     echo '<div class="listeProduits">';
-    foreach ($products as $product) {
+    foreach ($xml->produit as $product) {
         echo '<div class="produit">';
-        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nomProd']) . '">';
-        echo '<h2>' . htmlspecialchars($product['nomProd']) . '</h2>';
-        echo '<p class="prixProd">' . $product['prixProd'] . ' €</p>';
-        echo '<p>' . htmlspecialchars($product['description']) . '</p>';
+        echo '<img src="' . htmlspecialchars($product->image) . '" alt="' . htmlspecialchars($product->nomProd) . '">';
+        echo '<h2>' . htmlspecialchars($product->nomProd) . '</h2>';
+        echo '<p class="prixProd">' . htmlspecialchars($product->prixProd) . ' €</p>';
+        echo '<p>' . htmlspecialchars($product->description) . '</p>';
         echo '<button>Ajouter au panier</button>';
         echo '</div>';
     }
