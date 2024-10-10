@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -6,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site peluches</title>
+    <link rel="stylesheet" href="styleCommun.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -23,9 +26,9 @@
                 </form>
             </div>
             <div class="menu-right">
-                    <a href="panier.php" class="btn-panier">
-                        <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
-                    </a>
+                <a href="panier.php" class="btn-panier">
+                    <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
+                </a>
                 <button class="btn-connect">Se connecter</button>
             </div>
         </nav>
@@ -46,11 +49,21 @@
         echo '<h2>' . htmlspecialchars($product->nomProd) . '</h2>';
         echo '<p class="prixProd">' . htmlspecialchars($product->prixProd) . ' €</p>';
         echo '<p>' . htmlspecialchars($product->description) . '</p>';
-        echo '<button>Ajouter au panier</button>';
+
+        // Formulaire pour ajouter au panier
+        echo '<form action="panier.php" method="post">';
+        echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
+        echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
+        echo '<button type="submit">Ajouter au panier</button>';
+        echo '</form>';
+
         echo '</div>';
     }
     echo '</div>';
     ?>
+
+
+
 
 </body>
 
