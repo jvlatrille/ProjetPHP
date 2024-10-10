@@ -16,7 +16,16 @@
             <div class="menu-left">
                 <a href="index.php">Page d'accueil</a>
             </div>
+            <div class="menu-center">
+                <form action="search.php" method="get">
+                    <input type="text" name="query" placeholder="Rechercher...">
+                    <button type="submit">Rechercher</button>
+                </form>
+            </div>
             <div class="menu-right">
+                    <a href="panier.php" class="btn-panier">
+                        <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
+                    </a>
                 <button class="btn-connect">Se connecter</button>
             </div>
         </nav>

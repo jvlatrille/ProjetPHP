@@ -30,6 +30,18 @@ header {
 }
 
 
+.menu-right .btn-panier {
+    width: 30px !important; /* Utilise !important pour forcer le style */
+    height: auto !important; /* Garde le ratio */
+    max-width: 100%; /* Assure que l'image ne dépasse pas de son conteneur */
+    display: block; /* Supprime les marges supplémentaires éventuelles */
+}
+
+
+
+
+
+/* Style pour la section de la liste des produits */
 
 .listeProduits {
     display: flex;
