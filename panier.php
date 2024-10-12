@@ -6,21 +6,23 @@ if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Si on reçoit des données de produit via POST, on les ajoute au panier
-if (isset($_POST['nomProd'], $_POST['prixProd'])) {
-    $product = [
-        'nomProd' => $_POST['nomProd'],
-        'prixProd' => $_POST['prixProd'],
-        'quantite' => 1 // On commence avec une quantité de 1
-    ];
+// Si on reçoit une demande de retrait d'un produit
+if (isset($_POST['retirerProd'])) {
+    $nomProd = $_POST['retirerProd'];
 
-    $_SESSION['panier'][] = $product; // On ajoute le produit au panier
-}
-
-// Si on reçoit une demande de retrait de produit
-if (isset($_POST['retirer']) && isset($_POST['index'])) {
-    $index = (int)$_POST['index'];
-    array_splice($_SESSION['panier'], $index, 1); // On enlève le produit du panier
+    // Parcourir le panier pour trouver le produit et réduire sa quantité
+    foreach ($_SESSION['panier'] as $key => &$item) {
+        if ($item['nomProd'] === $nomProd) {
+            if ($item['quantite'] > 1) {
+                // Réduire la quantité de 1
+                $item['quantite'] -= 1;
+            } else {
+                // Si la quantité est 1, retirer complètement le produit
+                unset($_SESSION['panier'][$key]);
+            }
+            break;
+        }
+    }
 }
 
 ?>
@@ -54,10 +56,18 @@ if (isset($_POST['retirer']) && isset($_POST['index'])) {
                 <a href="panier.php" class="btn-panier">
                     <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
                 </a>
-                <button class="btn-connect">Se connecter</button>
+
+                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']): ?>
+                    <!-- Bouton Se déconnecter en rouge -->
+                    <button class="btn-disconnect" onclick="location.href='logout.php'">Se déconnecter</button>
+                <?php else: ?>
+                    <!-- Bouton Se connecter en vert -->
+                    <button class="btn-connect" onclick="openLoginPopup()">Se connecter</button>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
+
     <h1>Votre Panier</h1>
 
     <?php if (!empty($_SESSION['panier'])): ?>
@@ -68,15 +78,15 @@ if (isset($_POST['retirer']) && isset($_POST['index'])) {
                 <th>Quantité</th>
                 <th>Action</th>
             </tr>
-            <?php foreach ($_SESSION['panier'] as $index => $product): ?>
+            <?php foreach ($_SESSION['panier'] as $item): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($product['nomProd']); ?></td>
-                    <td><?php echo number_format($product['prixProd'], 2); ?> €</td>
-                    <td><?php echo $product['quantite']; ?></td>
+                    <td><?php echo htmlspecialchars($item['nomProd']); ?></td>
+                    <td><?php echo number_format($item['prixProd'], 2); ?> €</td>
+                    <td><?php echo $item['quantite']; ?></td>
                     <td>
                         <form action="panier.php" method="post">
-                            <input type="hidden" name="index" value="<?php echo $index; ?>">
-                            <button type="submit" name="retirer">Retirer</button>
+                            <input type="hidden" name="retirerProd" value="<?php echo htmlspecialchars($item['nomProd']); ?>">
+                            <button type="submit">Retirer une unité</button>
                         </form>
                     </td>
                 </tr>

@@ -78,6 +78,18 @@
 }
 
 
+.message-ajout-panier {
+    background-color: #ffcccb; /* Fond rouge clair pour attirer l'attention */
+    color: #333; /* Texte noir ou foncé */
+    padding: 10px; /* Espacement interne */
+    border: 1px solid #ff5c5c; /* Bordure rouge */
+    border-radius: 5px; /* Coins arrondis */
+    text-align: center; /* Centrer le texte */
+    margin-top: 10px; /* Espace au-dessus */
+    font-size: 16px; /* Taille de police */
+}
+
+
 /* Popup de confirmation */
 .popup-message {
     position: fixed;
@@ -88,4 +100,27 @@
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup vert d'ajout au panier */
+.popup-ajout-panier {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745; /* Vert */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1000;
+}
+
+.popup-ajout-panier.show {
+    opacity: 1; /* Le pop-up apparaît avec une transition douce */
+}
+
+.popup-ajout-panier.hide {
+    opacity: 0;
 }

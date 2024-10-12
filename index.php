@@ -1,5 +1,9 @@
 <?php
-session_start(); ?>
+session_start(); // Démarrer la session
+
+// Vérifier si l'utilisateur est connecté
+$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,10 +32,17 @@ session_start(); ?>
                 </form>
             </div>
             <div class="menu-right">
-                <a href="panier.php" class="btn-panier">
-                    <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
-                </a>
-                <button class="btn-connect" onclick="openLoginPopup()">Se connecter</button>
+                <?php if ($isLoggedIn): ?>
+                    <!-- Afficher le bouton Panier uniquement si connecté -->
+                    <a href="panier.php" class="btn-panier">
+                        <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
+                    </a>
+                    <!-- Bouton Se déconnecter en rouge -->
+                    <button class="btn-disconnect" onclick="location.href='logout.php'">Se déconnecter</button>
+                <?php else: ?>
+                    <!-- Afficher le bouton Se connecter si non connecté -->
+                    <button class="btn-connect" onclick="openLoginPopup()">Se connecter</button>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
@@ -52,17 +63,83 @@ session_start(); ?>
         echo '<p class="prixProd">' . htmlspecialchars($product->prixProd) . ' €</p>';
         echo '<p>' . htmlspecialchars($product->description) . '</p>';
 
-        // Formulaire pour ajouter le produit au panier
-        echo '<form method="post" action="index.php">';
-        echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
-        echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
-        echo '<button type="submit">Ajouter au panier</button>';
-        echo '</form>';
+        // Vérifier si le produit est déjà dans le panier
+        $produitAjoute = false;
+        $quantiteProduit = 0;
+
+        if ($isLoggedIn && isset($_SESSION['panier'])) {
+            foreach ($_SESSION['panier'] as $item) {
+                if ($item['nomProd'] === (string)$product->nomProd) {
+                    $produitAjoute = true;
+                    $quantiteProduit = $item['quantite'];
+                    break;
+                }
+            }
+        }
+
+        if ($isLoggedIn) {
+            if ($produitAjoute) {
+                // Si le produit est déjà dans le panier, afficher le bouton "Ajouter ? (quantité)"
+                echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . htmlspecialchars($product->nomProd) . '\', ' . htmlspecialchars($product->prixProd) . ', ' . $quantiteProduit . ')">';
+                echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
+                echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
+                echo '<button type="submit">Ajouter ? (' . $quantiteProduit . ')</button>';
+                echo '</form>';
+            } else {
+                // Sinon, afficher le bouton "Ajouter au panier"
+                echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . htmlspecialchars($product->nomProd) . '\', ' . htmlspecialchars($product->prixProd) . ', 0)">';
+                echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
+                echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
+                echo '<button type="submit">Ajouter au panier</button>';
+                echo '</form>';
+            }
+        } else {
+            echo '<p class="message-ajout-panier">Connectez-vous pour ajouter au panier</p>';
+        }
 
         echo '</div>';
     }
     echo '</div>';
     ?>
+
+    <script>
+        // Gérer l'ajout au panier et afficher le pop-up
+        function ajouterAuPanier(event, nomProd, prixProd, quantiteActuelle) {
+            event.preventDefault(); // Empêcher la soumission par défaut du formulaire
+
+            // Ajouter le produit au panier via AJAX ou via PHP
+            var formData = new FormData();
+            formData.append('nomProd', nomProd);
+            formData.append('prixProd', prixProd);
+
+            fetch('index.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json()) // Attendre la réponse en JSON avec la quantité mise à jour
+                .then(data => {
+                    // Une fois le produit ajouté, afficher le pop-up et mettre à jour le bouton
+
+                    // Afficher le pop-up vert en bas à droite
+                    var popup = document.createElement('div');
+                    popup.className = 'popup-ajout-panier show';
+                    popup.innerText = 'Ajouté au panier !';
+                    document.body.appendChild(popup);
+
+                    // Masquer le pop-up après 3 secondes
+                    setTimeout(() => {
+                        popup.classList.add('hide');
+                        setTimeout(() => popup.remove(), 500); // Retirer complètement l'élément après l'animation
+                    }, 3000);
+
+                    // Mettre à jour le texte du bouton "Ajouter ? (quantité)"
+                    var button = event.target.querySelector('button');
+                    button.innerText = 'Ajouter ? (' + data.quantite + ')'; // Quantité mise à jour
+                });
+
+            return false;
+        }
+    </script>
+
 
     <?php
     // Si la méthode de requête est POST et que les champs nomProd et prixProd sont définis
@@ -72,35 +149,115 @@ session_start(); ?>
             $_SESSION['panier'] = [];
         }
 
-        // On crée un tableau pour le produit avec son nom, prix et quantité
-        $product = [
-            'nomProd' => $_POST['nomProd'],
-            'prixProd' => $_POST['prixProd'],
-            'quantite' => 1
-        ];
-        // On ajoute le produit au panier
-        $_SESSION['panier'][] = $product;
+        // Vérifier si le produit est déjà dans le panier
+        $produitExistant = false;
+        foreach ($_SESSION['panier'] as &$item) {
+            if ($item['nomProd'] === $_POST['nomProd']) {
+                $item['quantite'] += 1;
+                $produitExistant = true;
+                break;
+            }
+        }
 
-        // On affiche un message de confirmation
+        // Si le produit n'est pas encore dans le panier, l'ajouter
+        if (!$produitExistant) {
+            $_SESSION['panier'][] = [
+                'nomProd' => $_POST['nomProd'],
+                'prixProd' => $_POST['prixProd'],
+                'quantite' => 1
+            ];
+        }
+
+        // Afficher un message de confirmation
         echo '<div id="popup" class="popup-message">Produit ajouté au panier !</div>';
     }
     ?>
-    <div id="loginPopup" class="login-popup">
+
+    <!-- Popup de connexion -->
+    <div id="loginPopup" class="login-popup" style="display: <?php echo isset($_GET['loginError']) ? 'block' : 'none'; ?>;">
         <div class="login-popup-content">
             <span class="close" onclick="closeLoginPopup()">&times;</span>
             <h2>Connexion</h2>
-            <form action="connexion.php" method="post">
-                <label for="identifiant">Identifiant :</label>
-                <input type="text" id="identifiant" name="identifiant" required>
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" name="password" required>
+            <form action="connexion.php" method="POST">
+                <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                <input type="password" name="password" placeholder="Mot de passe" required>
                 <button type="submit">Se connecter</button>
             </form>
+
+            <!-- Si erreur de connexion, afficher le message d'erreur -->
+            <?php if (isset($_GET['loginError'])): ?>
+                <p style="color:red;">Informations incorrectes</p>
+            <?php endif; ?>
         </div>
     </div>
 
-    <script src="js/scriptPanier.js"></script>
     <script src="js/scriptConnexion.js"></script>
 </body>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            <p>&copy; 2024 Peluches R Us. Tous droits réservés.</p>
+        </div>
+        <div class="footer-right">
+            <a href="#" onclick="openContactPopup(event)">Contact</a> |
+            <a href="#" onclick="openPrivacyPopup(event)">Politique de confidentialité</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Popup Contact -->
+<div id="contactPopup" class="contact-popup" style="display: none;">
+    <div class="contact-popup-content">
+        <span class="close" onclick="closeContactPopup()">&times;</span>
+        <h2>Contacts</h2>
+        <p><strong>Tatiana NOVION :</strong> <a href="mailto:tnovion@iutbayonne.univ-pau.fr">tnovion@iutbayonne.univ-pau.fr</a></p>
+        <p><strong>Jules VINET LATRILLE :</strong> <a href="mailto:jvlatrille@iutbayonne.univ-pau.fr">jvlatrille@iutbayonne.univ-pau.fr</a></p>
+        <p><em>TD2 TP4</em></p>
+    </div>
+</div>
+
+<!-- Popup Politique de confidentialité (recette de gâteau au chocolat) -->
+<div id="privacyPopup" class="privacy-popup" style="display: none;">
+    <div class="privacy-popup-content">
+        <span class="close" onclick="closePrivacyPopup()">&times;</span>
+        <h2>Politique de confidentialité</h2>
+        <p><strong>Recette du gâteau au chocolat :</strong></p>
+        <ul>
+            <li>200g de chocolat noir</li>
+            <li>150g de beurre</li>
+            <li>150g de sucre</li>
+            <li>50g de farine</li>
+            <li>4 œufs</li>
+            <li>1 pincée de sel</li>
+        </ul>
+        <p>Faire fondre le chocolat avec le beurre. Mélanger les œufs et le sucre, ajouter la farine et la pincée de sel. Incorporer le chocolat fondu. Verser dans un moule et enfourner à 180°C pendant 20 minutes. Bon appétit !</p>
+    </div>
+</div>
+
+<script>
+    // Ouvrir le popup de contact
+    function openContactPopup(event) {
+        event.preventDefault(); // Empêcher la redirection par défaut
+        document.getElementById("contactPopup").style.display = "block";
+    }
+
+    // Fermer le popup de contact
+    function closeContactPopup() {
+        document.getElementById("contactPopup").style.display = "none";
+    }
+
+    // Ouvrir le popup de politique de confidentialité
+    function openPrivacyPopup(event) {
+        event.preventDefault(); // Empêcher la redirection par défaut
+        document.getElementById("privacyPopup").style.display = "block";
+    }
+
+    // Fermer le popup de politique de confidentialité
+    function closePrivacyPopup() {
+        document.getElementById("privacyPopup").style.display = "none";
+    }
+</script>
 
 </html>

@@ -1,21 +1,22 @@
 <?php
 session_start();
 
-$utilisateur = [
-    'root' => 'root' // Utilisateur 'root' avec mot de passe 'root'
-];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Vérifie si la requête est de type POST
-    $nomUtilisateur = $_POST['nomUtilisateur']; // Récupère le nom d'utilisateur du formulaire
-    $mdp = $_POST['mdp']; // Récupère le mot de passe du formulaire
+    // Remplacer ces valeurs par les bons identifiants et mots de passe
+    $validUsername = "root";
+    $validPassword = "root";
 
-    // Vérifie si l'utilisateur existe et si le mot de passe est correct
-    if (isset($utilisateur[$nomUtilisateur]) && $utilisateur[$nomUtilisateur] == $mdp) {
-        $_SESSION['user'] = $nomUtilisateur; // Stocke le nom d'utilisateur dans la session
-        header("Location: index.php"); // Redirige vers la page d'accueil
+    // Vérifier les informations de connexion
+    if ($username === $validUsername && $password === $validPassword) {
+        // Si les informations sont correctes, on initialise la session
+        $_SESSION['loggedin'] = true;
+        header("Location: index.php"); // Rediriger vers la page d'accueil
     } else {
-        $_SESSION['error'] = true; // Indique une erreur de connexion
-        header("Location: index.php"); // Redirige vers la page d'accueil
+        // Sinon, on retourne sur la page de connexion avec une erreur
+        header("Location: index.php?loginError=true");
     }
 }
 ?>

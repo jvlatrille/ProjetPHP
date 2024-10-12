@@ -1,0 +1,75 @@
+/* Styles pour le popup de connexion */
+.login-popup {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fond transparent noir */
+    z-index: 1000; /* S'assurer que le popup soit au-dessus de tout */
+}
+
+.login-popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrer le contenu */
+    background-color: #ffffff; /* Fond blanc */
+    padding: 40px 30px; /* Espacement interne */
+    width: 350px; /* Largeur du popup */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Ombre du popup */
+    border-radius: 10px; /* Coins arrondis */
+    text-align: center; /* Centrer le texte */
+}
+
+/* Style pour le titre de connexion */
+.login-popup-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Couleur du texte */
+}
+
+/* Style des champs de saisie */
+.login-popup-content input[type="text"],
+.login-popup-content input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Pour que la largeur inclut les bordures */
+    font-size: 16px;
+}
+
+/* Style du bouton de connexion */
+.login-popup-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-popup-content button:hover {
+    background-color: #218838; /* Vert un peu plus sombre au survol */
+}
+
+/* Style du bouton fermer */
+.login-popup-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333; /* Couleur sombre */
+    transition: color 0.3s ease;
+}
+
+.login-popup-content .close:hover {
+    color: #ff0000; /* Couleur rouge au survol */
+}
