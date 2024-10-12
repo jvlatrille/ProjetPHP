@@ -1,24 +1,5 @@
 <?php
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nomProd'], $_POST['prixProd'])) {
-    // Vérifie si le panier existe, sinon crée-le
-    if (!isset($_SESSION['panier'])) {
-        $_SESSION['panier'] = [];
-    }
-
-    // Ajouter le produit au panier
-    $product = [
-        'nomProd' => $_POST['nomProd'],
-        'prixProd' => $_POST['prixProd'],
-        'quantite' => 1 // Quantité par défaut à 1
-    ];
-    $_SESSION['panier'][] = $product;
-
-    // Message de confirmation avec popup
-    echo '<div id="popup" class="popup-message">Produit ajouté au panier !</div>';
-}
-?>
+session_start(); ?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -59,10 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nomProd'], $_POST['pri
     <p>Plein plein de pitites pilouches à vendre</p>
 
     <?php
-    // Lire le fichier XML
+    // On charge le fichier XML contenant les produits
     $xml = simplexml_load_file('xml/produits.xml');
 
     echo '<div class="listeProduits">';
+    // On parcourt chaque produit dans le fichier XML et on les affiche
     foreach ($xml->produit as $product) {
         echo '<div class="produit">';
         echo '<img src="' . htmlspecialchars($product->image) . '" alt="' . htmlspecialchars($product->nomProd) . '">';
@@ -70,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nomProd'], $_POST['pri
         echo '<p class="prixProd">' . htmlspecialchars($product->prixProd) . ' €</p>';
         echo '<p>' . htmlspecialchars($product->description) . '</p>';
 
-        // Formulaire pour ajouter au panier
+        // Formulaire pour ajouter le produit au panier
         echo '<form method="post" action="index.php">';
         echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
         echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
@@ -82,6 +64,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nomProd'], $_POST['pri
     echo '</div>';
     ?>
 
+    <?php
+    // Si la méthode de requête est POST et que les champs nomProd et prixProd sont définis
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nomProd'], $_POST['prixProd'])) {
+        // Si le panier n'existe pas encore dans la session, on le crée
+        if (!isset($_SESSION['panier'])) {
+            $_SESSION['panier'] = [];
+        }
+
+        // On crée un tableau pour le produit avec son nom, prix et quantité
+        $product = [
+            'nomProd' => $_POST['nomProd'],
+            'prixProd' => $_POST['prixProd'],
+            'quantite' => 1
+        ];
+        // On ajoute le produit au panier
+        $_SESSION['panier'][] = $product;
+
+        // On affiche un message de confirmation
+        echo '<div id="popup" class="popup-message">Produit ajouté au panier !</div>';
+    }
+    ?>
     <div id="loginPopup" class="login-popup">
         <div class="login-popup-content">
             <span class="close" onclick="closeLoginPopup()">&times;</span>

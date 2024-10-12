@@ -4,23 +4,90 @@
         <prixProd>10.99</prixProd>
         <image>img/saucisson.png</image>
         <description>Il est mignon et il est bon</description>
+        <quantite>3</quantite>
     </produit>
     <produit>
         <nomProd>Loutre</nomProd>
         <prixProd>9999999.99</prixProd>
         <image>img/Loutre.jpg</image>
         <description>C'est mignon donc c'est cher</description>
+        <quantite>3</quantite>
     </produit>
     <produit>
         <nomProd>Kiki</nomProd>
         <prixProd>-9.99</prixProd>
         <image>img/kiki.jpg</image>
         <description>On en veut plus, prennez le</description>
+        <quantite>3</quantite>
     </produit>
     <produit>
         <nomProd>Sinje</nomProd>
         <prixProd>999.99</prixProd>
         <image>img/Singe.jpg</image>
         <description>Le plus bô, mais moins mignon que la loutre</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>Steech</nomProd>
+        <prixProd>12.99</prixProd>
+        <image>img/stitch.jpg</image>
+        <description>Aloha signifie famille, famille signifie qu'on ne doit laisser personne de côté</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>ted</nomProd>
+        <prixProd>15.99</prixProd>
+        <image>img/teddyBear.jpg</image>
+        <description>un ours ou un homme ?</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>phrygette</nomProd>
+        <prixProd>78.99</prixProd>
+        <image>img/phrygette.jpg</image>
+        <description>La république c'est moi</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>babar</nomProd>
+        <prixProd>154.99</prixProd>
+        <image>img/babar.jpg</image>
+        <description>tema la trompe</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>pikachou</nomProd>
+        <prixProd>97.99</prixProd>
+        <image>img/pikapika.jpg</image>
+        <description>pika pika pikachou</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>evolition</nomProd>
+        <prixProd>45.99</prixProd>
+        <image>img/evoli.jpg</image>
+        <description>thers's a squirrell in my pants</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>totu</nomProd>
+        <prixProd>78.99</prixProd>
+        <image>img/totu.jpg</image>
+        <description>c'est franklin mais dans l'eau</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>drago</nomProd>
+        <prixProd>999.99</prixProd>
+        <image>img/drago.jpg</image>
+        <description>feu</description>
+        <quantite>3</quantite>
+    </produit>
+    <produit>
+        <nomProd>taco</nomProd>
+        <prixProd>785.99</prixProd>
+        <image>img/taco.jpg</image>
+        <description>miam miam</description>
+        <quantite>3</quantite>
     </produit>
 </produits>

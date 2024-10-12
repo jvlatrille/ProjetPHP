@@ -1,28 +1,26 @@
 <?php
 session_start();
 
-// Vérifier si le panier existe, sinon en créer un
+// Si le panier n'existe pas encore, on le crée
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Si un produit est ajouté via un formulaire ou un bouton
+// Si on reçoit des données de produit via POST, on les ajoute au panier
 if (isset($_POST['nomProd'], $_POST['prixProd'])) {
     $product = [
         'nomProd' => $_POST['nomProd'],
         'prixProd' => $_POST['prixProd'],
-        'quantite' => 1 // Quantité par défaut à 1
+        'quantite' => 1 // On commence avec une quantité de 1
     ];
 
-    // Ajouter le produit au panier
-    $_SESSION['panier'][] = $product;
+    $_SESSION['panier'][] = $product; // On ajoute le produit au panier
 }
 
-// Si un produit est retiré du panier
+// Si on reçoit une demande de retrait de produit
 if (isset($_POST['retirer']) && isset($_POST['index'])) {
     $index = (int)$_POST['index'];
-    // Retirer l'élément de la session
-    array_splice($_SESSION['panier'], $index, 1);
+    array_splice($_SESSION['panier'], $index, 1); // On enlève le produit du panier
 }
 
 ?>
@@ -88,6 +86,7 @@ if (isset($_POST['retirer']) && isset($_POST['index'])) {
         <h3>Total :
             <?php
             $total = 0;
+            // On calcule le total du panier
             foreach ($_SESSION['panier'] as $product) {
                 $total += $product['prixProd'] * $product['quantite'];
             }
