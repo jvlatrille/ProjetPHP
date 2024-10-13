@@ -33,6 +33,8 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
             </div>
             <div class="menu-right">
                 <?php if ($isLoggedIn): ?>
+                    <!-- Afficher le nom d'utilisateur au-dessus du bouton Se déconnecter -->
+                    <p style="color: white;">Connecté en tant que <?php echo htmlspecialchars($_SESSION['username']); ?></p>
                     <!-- Afficher le bouton Panier uniquement si connecté -->
                     <a href="panier.php" class="btn-panier">
                         <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
@@ -43,6 +45,7 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                     <!-- Afficher le bouton Se connecter si non connecté -->
                     <button class="btn-connect" onclick="openLoginPopup()">Se connecter</button>
                 <?php endif; ?>
+
             </div>
         </nav>
     </header>
@@ -187,9 +190,26 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
             <!-- Si erreur de connexion, afficher le message d'erreur -->
             <?php if (isset($_GET['loginError'])): ?>
                 <p style="color:red;">Informations incorrectes</p>
+                <a href="#" onclick="openSignupPopup()">Pas de compte ? Créez-en un !</a> <!-- Lien pour ouvrir le popup de création de compte -->
             <?php endif; ?>
         </div>
     </div>
+
+
+    <!-- Popup de création de compte -->
+    <div id="signupPopup" class="signup-popup" style="display: none;">
+        <div class="signup-popup-content">
+            <span class="close" onclick="closeSignupPopup()">&times;</span>
+            <h2>Créer un compte</h2>
+            <form action="creer_utilisateur.php" method="POST">
+                <input type="text" name="new_username" placeholder="Nom d'utilisateur" required>
+                <input type="password" name="new_password" placeholder="Mot de passe" required>
+                <button type="submit">Créer un compte</button>
+            </form>
+        </div>
+    </div>
+
+
 
     <script src="js/scriptConnexion.js"></script>
 </body>
