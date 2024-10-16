@@ -2,46 +2,33 @@
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['new_username'];
-    $password = password_hash($_POST['new_password'], PASSWORD_DEFAULT); // Hash sécurisé du mot de passe
+    $newUsername = $_POST['new_username'];
+    $newPassword = password_hash($_POST['new_password'], PASSWORD_DEFAULT); // Hacher le mot de passe
 
-    // Charger le fichier XML
-    $xmlFilePath = 'xml/utilisateurs.xml';
-    if (!file_exists($xmlFilePath)) {
-        // Si le fichier n'existe pas encore, créer un fichier vide de base
-        $xml = new SimpleXMLElement('<utilisateurs></utilisateurs>');
+    // Charger le fichier JSON des utilisateurs
+    $jsonFilePath = 'json/utilisateurs.json';
+    if (file_exists($jsonFilePath)) {
+        $jsonData = file_get_contents($jsonFilePath);
+        $utilisateurs = json_decode($jsonData, true);
     } else {
-        $xml = simplexml_load_file($xmlFilePath);
+        die("Erreur : fichier utilisateurs.json introuvable !");
     }
 
-    // Vérifier si l'utilisateur existe déjà
-    $userExists = false;
-    foreach ($xml->utilisateur as $utilisateur) {
-        if ($utilisateur->username == $username) {
-            $userExists = true;
-            break;
-        }
-    }
+    // Ajouter le nouvel utilisateur
+    $utilisateurs['utilisateurs'][] = [
+        'username' => $newUsername,
+        'password' => $newPassword
+    ];
 
-    if ($userExists) {
-        // Si l'utilisateur existe déjà, rediriger avec une erreur
-        header('Location: index.php?error=userexists');
-        exit();
-    } else {
-        // Ajouter un nouvel utilisateur dans le fichier XML
-        $newUser = $xml->addChild('utilisateur');
-        $newUser->addChild('username', $username);
-        $newUser->addChild('password', $password);
+    // Sauvegarder les changements dans le fichier JSON
+    file_put_contents($jsonFilePath, json_encode($utilisateurs, JSON_PRETTY_PRINT));
 
-        // Sauvegarder les modifications dans le fichier XML
-        $xml->asXML($xmlFilePath);
+    // Connecter automatiquement l'utilisateur
+    $_SESSION['loggedin'] = true;
+    $_SESSION['username'] = $newUsername;
 
-        // Créer la session pour l'utilisateur nouvellement créé
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
-
-        // Rediriger vers la page d'accueil
-        header('Location: index.php');
-        exit();
-    }
+    // Rediriger vers la page d'accueil
+    header('Location: index.php');
+    exit();
 }
+?>

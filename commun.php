@@ -41,6 +41,20 @@ function afficherHeader() {
             </div>
         </nav>
     </header>';
+
+    // Afficher le pop-up d'erreur si une erreur de connexion est présente dans la session
+    if (isset($_SESSION['loginError'])) {
+        echo '
+        <div class="alert alert-danger position-fixed bottom-0 end-0 m-3" role="alert">
+            Informations incorrectes !
+        </div>
+        <script>
+            setTimeout(function() {
+                document.querySelector(".alert").remove();
+            }, 3000); // Retirer le pop-up après 3 secondes
+        </script>';
+        unset($_SESSION['loginError']); // Effacer l'erreur après l'affichage
+    }
 }
 
 function afficherFooter() {
@@ -77,8 +91,41 @@ function afficherFooter() {
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de passe</label>
                             <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
+                        </div>';
+
+    // Vérifier si une erreur de connexion est définie
+    if (isset($_SESSION['loginError'])) {
+        echo '<div class="alert alert-danger">Informations erronées. <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Créer un compte ?</a></div>';
+        unset($_SESSION['loginError']); // Effacer l'erreur après l'affichage
+    }
+
+    echo '
                         <button type="submit" class="btn btn-primary">Se connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Créer un compte -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">Créer un compte</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="creer_utilisateur.php" method="POST">
+                        <div class="mb-3">
+                            <label for="new_username" class="form-label">Nom d\'utilisateur</label>
+                            <input type="text" class="form-control" id="new_username" name="new_username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Créer un compte</button>
                     </form>
                 </div>
             </div>
