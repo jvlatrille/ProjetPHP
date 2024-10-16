@@ -27,61 +27,73 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
         <p class="text-center">Plein plein de pitites pilouches à vendre</p>
 
         <?php
-        // On charge le fichier XML contenant les produits
-        $xml = simplexml_load_file('xml/produits.xml');
+        // On charge le fichier JSON contenant les produits
+        $jsonFile = file_get_contents('json/produits.json');
+        $data = json_decode($jsonFile, true); // Décoder le JSON en tableau associatif
 
-        echo '<div class="row">';
-        // On parcourt chaque produit dans le fichier XML et on les affiche
-        foreach ($xml->produit as $product) {
-            echo '
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="' . htmlspecialchars($product->image) . '" class="card-img-top" alt="' . htmlspecialchars($product->nomProd) . '">
-                    <div class="card-body">
-                        <h5 class="card-title">' . htmlspecialchars($product->nomProd) . '</h5>
-                        <p class="card-text">' . htmlspecialchars($product->description) . '</p>
-                        <p class="card-text"><strong>' . htmlspecialchars($product->prixProd) . ' €</strong></p>';
+        // S'assurer que la clé "produits" existe et est un tableau
+        if (isset($data['produits']) && is_array($data['produits'])) {
+            echo '<div class="row">';
 
-            // Vérifier si le produit est déjà dans le panier
-            $produitAjoute = false;
-            $quantiteProduit = 0;
+            // On parcourt chaque produit dans le tableau JSON et on les affiche
+            foreach ($data['produits'] as $product) {
+                $nomProd = isset($product['nomProd']) ? htmlspecialchars($product['nomProd']) : 'Produit sans nom';
+                $prixProd = isset($product['prixProd']) ? htmlspecialchars($product['prixProd']) : '0.00';
+                $image = isset($product['image']) ? htmlspecialchars($product['image']) : 'img/default.png';
+                $description = isset($product['description']) ? htmlspecialchars($product['description']) : 'Pas de description';
 
-            if ($isLoggedIn && isset($_SESSION['panier'])) {
-                foreach ($_SESSION['panier'] as $item) {
-                    if ($item['nomProd'] === (string)$product->nomProd) {
-                        $produitAjoute = true;
-                        $quantiteProduit = $item['quantite'];
-                        break;
+                echo '
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="' . $image . '" class="card-img-top" alt="' . $nomProd . '">
+                        <div class="card-body">
+                            <h5 class="card-title">' . $nomProd . '</h5>
+                            <p class="card-text">' . $description . '</p>
+                            <p class="card-text"><strong>' . $prixProd . ' €</strong></p>';
+
+                // Vérifier si le produit est déjà dans le panier
+                $produitAjoute = false;
+                $quantiteProduit = 0;
+
+                if ($isLoggedIn && isset($_SESSION['panier'])) {
+                    foreach ($_SESSION['panier'] as $item) {
+                        if ($item['nomProd'] === $product['nomProd']) {
+                            $produitAjoute = true;
+                            $quantiteProduit = $item['quantite'];
+                            break;
+                        }
                     }
                 }
-            }
 
-            if ($isLoggedIn) {
-                if ($produitAjoute) {
-                    // Si le produit est déjà dans le panier, afficher le bouton "Ajouter ? (quantité)"
-                    echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . htmlspecialchars($product->nomProd) . '\', ' . htmlspecialchars($product->prixProd) . ', ' . $quantiteProduit . ')">';
-                    echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
-                    echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
-                    echo '<button type="submit" class="btn btn-primary w-100">Ajouter ? (' . $quantiteProduit . ')</button>';
-                    echo '</form>';
+                if ($isLoggedIn) {
+                    if ($produitAjoute) {
+                        // Si le produit est déjà dans le panier, afficher le bouton "Ajouter ? (quantité)"
+                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProd . '\', ' . $prixProd . ', ' . $quantiteProduit . ')">';
+                        echo '<input type="hidden" name="nomProd" value="' . $nomProd . '">';
+                        echo '<input type="hidden" name="prixProd" value="' . $prixProd . '">';
+                        echo '<button type="submit" class="btn btn-primary w-100">Ajouter ? (' . $quantiteProduit . ')</button>';
+                        echo '</form>';
+                    } else {
+                        // Sinon, afficher le bouton "Ajouter au panier"
+                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProd . '\', ' . $prixProd . ', 0)">';
+                        echo '<input type="hidden" name="nomProd" value="' . $nomProd . '">';
+                        echo '<input type="hidden" name="prixProd" value="' . $prixProd . '">';
+                        echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
+                        echo '</form>';
+                    }
                 } else {
-                    // Sinon, afficher le bouton "Ajouter au panier"
-                    echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . htmlspecialchars($product->nomProd) . '\', ' . htmlspecialchars($product->prixProd) . ', 0)">';
-                    echo '<input type="hidden" name="nomProd" value="' . htmlspecialchars($product->nomProd) . '">';
-                    echo '<input type="hidden" name="prixProd" value="' . htmlspecialchars($product->prixProd) . '">';
-                    echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
-                    echo '</form>';
+                    echo '<p class="text-danger">Connectez-vous pour ajouter au panier</p>';
                 }
-            } else {
-                echo '<p class="text-danger">Connectez-vous pour ajouter au panier</p>';
-            }
 
-            echo '
+                echo '
+                        </div>
                     </div>
-                </div>
-            </div>';
+                </div>';
+            }
+            echo '</div>';
+        } else {
+            echo '<p>Aucun produit disponible.</p>';
         }
-        echo '</div>';
         ?>
 
     </div>

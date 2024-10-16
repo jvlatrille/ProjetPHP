@@ -1,0 +1,21 @@
+{
+    "utilisateurs": [
+      {
+        "username": "oui",
+        "password": "$2y$10$B5OMH2A.6dGFEWq9facS7.szx9Pq6N.RQLHfGAWK739/z4g7AoagS"
+      },
+      {
+        "username": "root",
+        "password": "$2y$10$bspGGZySQoIlm4b3TQ7oKeOeZAPHsl/G6hyxhQapWc5DpBEzoU4K2"
+      },
+      {
+        "username": "aaa",
+        "password": "$2y$10$XI1KCuB.3OLNT4zfG4XxvOC.c9acZ70YbOs2T/Ag2ba78K1FWmHhW"
+      },
+      {
+        "username": "tatiTatou",
+        "password": "$2y$10$u5cRHYCgjnPXGFnllbKnRu8O5jUQoJzstWDbzZb19CLx3wUjy0Qw."
+      }
+    ]
+  }
+  
