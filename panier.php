@@ -2,30 +2,29 @@
 include 'commun.php';
 session_start();
 
-// Si le panier n'existe pas encore, on le crée
+// Si le panier n'existe pas encore, on le crée (vide)
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
-// Si on reçoit une demande de retrait d'un produit
+// Si ya une demande de retrait d'un produit
 if (isset($_POST['retirerProd'])) {
-    $nomProd = $_POST['retirerProd'];
+    $nomProduit = $_POST['retirerProd']; // Récupérer le nom du produit à retirer
 
-    // Parcourir le panier pour trouver le produit et réduire sa quantité
-    foreach ($_SESSION['panier'] as $key => &$item) {
-        if ($item['nomProd'] === $nomProd) {
-            if ($item['quantite'] > 1) {
-                // Réduire la quantité de 1
-                $item['quantite'] -= 1;
+    // Parcourir le panier pour trouver le produit et réduire sa quantité de 1
+    foreach ($_SESSION['panier'] as $cle => &$article) {
+        if ($article['nomProd'] === $nomProduit) {
+            if ($article['quantite'] > 1) {
+                // Si la quantité est supérieure à 1, on réduit de 1
+                $article['quantite'] -= 1;
             } else {
-                // Si la quantité est 1, retirer complètement le produit
-                unset($_SESSION['panier'][$key]);
+                // Si la quantité est de 1, on retire complètement le produit
+                unset($_SESSION['panier'][$cle]);
             }
             break;
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -36,19 +35,17 @@ if (isset($_POST['retirerProd'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre panier</title>
-    
-    <!-- Bootstrap CSS -->
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <?php afficherHeader(); ?>
+    <?php afficherHeader(); // Affichage du header ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Votre Panier</h1>
 
-        <?php if (!empty($_SESSION['panier'])): ?>
+        <?php if (!empty($_SESSION['panier'])): // Si le panier n'est pas vide ?>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
@@ -60,14 +57,14 @@ if (isset($_POST['retirerProd'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($_SESSION['panier'] as $item): ?>
+                        <?php foreach ($_SESSION['panier'] as $article): // Parcourir chaque produit du panier ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($item['nomProd']); ?></td>
-                                <td><?php echo number_format($item['prixProd'], 2); ?> €</td>
-                                <td><?php echo $item['quantite']; ?></td>
+                                <td><?php echo htmlspecialchars($article['nomProd']); ?></td>
+                                <td><?php echo number_format($article['prixProd'], 2); ?> €</td>
+                                <td><?php echo $article['quantite']; ?></td>
                                 <td>
                                     <form action="panier.php" method="post">
-                                        <input type="hidden" name="retirerProd" value="<?php echo htmlspecialchars($item['nomProd']); ?>">
+                                        <input type="hidden" name="retirerProd" value="<?php echo htmlspecialchars($article['nomProd']); ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">Retirer une unité</button>
                                     </form>
                                 </td>
@@ -83,8 +80,8 @@ if (isset($_POST['retirerProd'])) {
                         <?php
                         $total = 0;
                         // On calcule le total du panier
-                        foreach ($_SESSION['panier'] as $product) {
-                            $total += $product['prixProd'] * $product['quantite'];
+                        foreach ($_SESSION['panier'] as $produit) {
+                            $total += $produit['prixProd'] * $produit['quantite'];
                         }
                         echo number_format($total, 2);
                         ?> €
@@ -101,9 +98,8 @@ if (isset($_POST['retirerProd'])) {
         </div>
     </div>
 
-    <?php afficherFooter(); ?>
+    <?php afficherFooter();?>
 
-    <!-- Bootstrap JS -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

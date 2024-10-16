@@ -1,9 +1,9 @@
 <?php
 include 'commun.php';
-session_start(); // Démarrer la session
+session_start();
 
-// Vérifier si l'utilisateur est connecté
-$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+// On vérifie si l'utilisateur est connecté (genre selon l'affichage des infos s'il est connecté ou pas)
+$estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 ?>
 
 <!DOCTYPE html>
@@ -15,12 +15,11 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site Peluches</title>
 
-    <!-- Bootstrap CSS -->
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <?php afficherHeader(); ?>
+    <?php afficherHeader();?>
 
     <div class="container mt-4">
         <h1 class="text-center">Vente de peluches</h1>
@@ -28,36 +27,36 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
         <?php
         // On charge le fichier JSON contenant les produits
-        $jsonFile = file_get_contents('json/produits.json');
-        $data = json_decode($jsonFile, true); // Décoder le JSON en tableau associatif
+        $fichierJson = file_get_contents('json/produits.json');
+        $donnees = json_decode($fichierJson, true); // On convertit le JSON en tableau associatif
 
-        // S'assurer que la clé "produits" existe et est un tableau
-        if (isset($data['produits']) && is_array($data['produits'])) {
+        // On vérifie que la clé "produits" existe et que c'est bien un tableau
+        if (isset($donnees['produits']) && is_array($donnees['produits'])) {
             echo '<div class="row">';
 
-            // On parcourt chaque produit dans le tableau JSON et on les affiche
-            foreach ($data['produits'] as $product) {
-                $nomProd = isset($product['nomProd']) ? htmlspecialchars($product['nomProd']) : 'Produit sans nom';
-                $prixProd = isset($product['prixProd']) ? htmlspecialchars($product['prixProd']) : '0.00';
-                $image = isset($product['image']) ? htmlspecialchars($product['image']) : 'img/default.png';
-                $description = isset($product['description']) ? htmlspecialchars($product['description']) : 'Pas de description';
+            // On parcourt chaque produit et on les affiche
+            foreach ($donnees['produits'] as $produit) {
+                $nomProduit = isset($produit['nomProd']) ? htmlspecialchars($produit['nomProd']) : 'Produit sans nom';
+                $prixProduit = isset($produit['prixProd']) ? htmlspecialchars($produit['prixProd']) : '0.00';
+                $image = isset($produit['image']) ? htmlspecialchars($produit['image']) : 'img/default.png';
+                $description = isset($produit['description']) ? htmlspecialchars($produit['description']) : 'Pas de description';
 
                 echo '
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                        <img src="' . $image . '" class="card-img-top" alt="' . $nomProd . '">
+                        <img src="' . $image . '" class="card-img-top" alt="' . $nomProduit . '">
                         <div class="card-body">
-                            <h5 class="card-title">' . $nomProd . '</h5>
+                            <h5 class="card-title">' . $nomProduit . '</h5>
                             <p class="card-text">' . $description . '</p>
-                            <p class="card-text"><strong>' . $prixProd . ' €</strong></p>';
+                            <p class="card-text"><strong>' . $prixProduit . ' €</strong></p>';
 
-                // Vérifier si le produit est déjà dans le panier
+                // On vérifie si le produit est déjà dans le panier
                 $produitAjoute = false;
                 $quantiteProduit = 0;
 
-                if ($isLoggedIn && isset($_SESSION['panier'])) {
+                if ($estConnecte && isset($_SESSION['panier'])) {
                     foreach ($_SESSION['panier'] as $item) {
-                        if ($item['nomProd'] === $product['nomProd']) {
+                        if ($item['nomProd'] === $produit['nomProd']) {
                             $produitAjoute = true;
                             $quantiteProduit = $item['quantite'];
                             break;
@@ -65,23 +64,24 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                     }
                 }
 
-                if ($isLoggedIn) {
+                if ($estConnecte) {
                     if ($produitAjoute) {
-                        // Si le produit est déjà dans le panier, afficher le bouton "Ajouter ? (quantité)"
-                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProd . '\', ' . $prixProd . ', ' . $quantiteProduit . ')">';
-                        echo '<input type="hidden" name="nomProd" value="' . $nomProd . '">';
-                        echo '<input type="hidden" name="prixProd" value="' . $prixProd . '">';
+                        // Si le produit est déjà dans le panier, on propose d'en ajouter plus
+                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', ' . $quantiteProduit . ')">';
+                        echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
+                        echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
                         echo '<button type="submit" class="btn btn-primary w-100">Ajouter ? (' . $quantiteProduit . ')</button>';
                         echo '</form>';
                     } else {
-                        // Sinon, afficher le bouton "Ajouter au panier"
-                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProd . '\', ' . $prixProd . ', 0)">';
-                        echo '<input type="hidden" name="nomProd" value="' . $nomProd . '">';
-                        echo '<input type="hidden" name="prixProd" value="' . $prixProd . '">';
+                        // Si le produit n'est pas encore dans le panier, on affiche le bouton "Ajouter"
+                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', 0)">';
+                        echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
+                        echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
                         echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
                         echo '</form>';
                     }
                 } else {
+                    // Si l'utilisateur n'est pas connecté
                     echo '<p class="text-danger">Connectez-vous pour ajouter au panier</p>';
                 }
 
@@ -92,15 +92,15 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
             }
             echo '</div>';
         } else {
-            echo '<p>Aucun produit disponible.</p>';
+            echo '<p>Aucun produit disponible pour le moment, dommage...</p>';
         }
         ?>
 
     </div>
 
-    <?php afficherFooter(); ?>
+    <?php afficherFooter();?>
 
-    <!-- Bootstrap JS -->
+    <!-- Un peu de JS pour la magie Bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

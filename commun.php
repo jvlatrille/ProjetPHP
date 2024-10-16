@@ -1,7 +1,9 @@
 <?php
 function afficherHeader() {
-    $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
-    $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : '';
+    // On vérifie si l'utilisateur est connecté
+    $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+    // On récupère le nom d'utilisateur
+    $nomUtilisateur = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : '';
 
     echo '
     <header>
@@ -13,20 +15,17 @@ function afficherHeader() {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Produits</a>
-                        </li>
                     </ul>
                     <form class="d-flex" action="search.php" method="get">
-                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher..." aria-label="Search">
+                        <input class="form-control me-2" type="search" name="recherche" placeholder="Rechercher..." aria-label="Recherche">
                         <button class="btn btn-secondary" type="submit">Rechercher</button>
                     </form>
                 </div>';
 
-    if ($isLoggedIn) {
+    if ($estConnecte) {
         echo '
         <div class="d-flex align-items-center ms-4">
-            <span class="text-white me-3">Utilisateur : ' . $username . '</span>
+            <span class="text-white me-3">Utilisateur : ' . $nomUtilisateur . '</span>
             <a href="panier.php" class="me-3">
                 <img src="img/panier.png" alt="Panier" style="width: 40px; height: 40px;">
             </a>
@@ -42,7 +41,7 @@ function afficherHeader() {
         </nav>
     </header>';
 
-    // Afficher le pop-up d'erreur si une erreur de connexion est présente dans la session
+    // Si une erreur de connexion, on l'affiche
     if (isset($_SESSION['loginError'])) {
         echo '
         <div class="alert alert-danger position-fixed bottom-0 end-0 m-3" role="alert">
@@ -51,9 +50,9 @@ function afficherHeader() {
         <script>
             setTimeout(function() {
                 document.querySelector(".alert").remove();
-            }, 3000); // Retirer le pop-up après 3 secondes
+            }, 3000); // Pop-up disparaît après 3 secondes
         </script>';
-        unset($_SESSION['loginError']); // Effacer l'erreur après l'affichage
+        unset($_SESSION['loginError']); // On efface l'erreur après l'affichage
     }
 }
 
@@ -96,7 +95,7 @@ function afficherFooter() {
     // Vérifier si une erreur de connexion est définie
     if (isset($_SESSION['loginError'])) {
         echo '<div class="alert alert-danger">Informations erronées. <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Créer un compte ?</a></div>';
-        unset($_SESSION['loginError']); // Effacer l'erreur après l'affichage
+        unset($_SESSION['loginError']); // Erreur effacée après affichage
     }
 
     echo '
