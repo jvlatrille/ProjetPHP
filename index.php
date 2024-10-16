@@ -86,44 +86,6 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
     </div>
 
-    <script>
-        // Gérer l'ajout au panier et afficher le pop-up
-        function ajouterAuPanier(event, nomProd, prixProd, quantiteActuelle) {
-            event.preventDefault(); // Empêcher la soumission par défaut du formulaire
-
-            // Ajouter le produit au panier via AJAX ou via PHP
-            var formData = new FormData();
-            formData.append('nomProd', nomProd);
-            formData.append('prixProd', prixProd);
-
-            fetch('index.php', {
-                    method: 'POST',
-                    body: formData
-                }).then(response => response.json()) // Attendre la réponse en JSON avec la quantité mise à jour
-                .then(data => {
-                    // Une fois le produit ajouté, afficher le pop-up et mettre à jour le bouton
-
-                    // Afficher le pop-up vert en bas à droite
-                    var popup = document.createElement('div');
-                    popup.className = 'popup-ajout-panier show';
-                    popup.innerText = 'Ajouté au panier !';
-                    document.body.appendChild(popup);
-
-                    // Masquer le pop-up après 3 secondes
-                    setTimeout(() => {
-                        popup.classList.add('hide');
-                        setTimeout(() => popup.remove(), 500); // Retirer complètement l'élément après l'animation
-                    }, 3000);
-
-                    // Mettre à jour le texte du bouton "Ajouter ? (quantité)"
-                    var button = event.target.querySelector('button');
-                    button.innerText = 'Ajouter ? (' + data.quantite + ')'; // Quantité mise à jour
-                });
-
-            return false;
-        }
-    </script>
-
     <?php afficherFooter(); ?>
 
     <!-- Bootstrap JS -->
