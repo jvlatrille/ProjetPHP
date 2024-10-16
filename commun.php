@@ -7,14 +7,14 @@ function afficherHeader() {
 
     echo '
     <header>
-        <nav class="menu">
-            <div class="menu-left">
+        <nav class="navbar navbar-expand-lg bg-primary">
+            <div class="container-fluid">
                 <a href="index.php">Page d\'accueil</a>
             </div>
             <div class="menu-center">
                 <form action="search.php" method="get">
-                    <input type="text" name="query" placeholder="Rechercher...">
-                    <button type="submit">Rechercher</button>
+                    <input class="form-control me-sm-2" type="text" name="query" placeholder="Rechercher...">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
                 </form>
             </div>
             <div class="menu-right">';
@@ -25,9 +25,9 @@ function afficherHeader() {
             <a href="panier.php" class="btn-panier">
                 <img src="img/panier.png" alt="Panier" style="width: 50px; height: 50px;">
             </a>
-            <button class="btn-disconnect" onclick="location.href=\'logout.php\'">Se déconnecter</button>';
+            <button class="btn btn-secondary my-2 my-sm-0" onclick="location.href=\'logout.php\'">Se déconnecter</button>';
     } else {
-        echo '<button class="btn-connect" onclick="openLoginPopup()">Se connecter</button>';
+        echo '<button class="btn btn-secondary my-2 my-sm-0" onclick="openLoginPopup()">Se connecter</button>';
     }
 
     echo '</div>

@@ -14,10 +14,7 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site peluches</title>
-    <link rel="stylesheet" href="css/styleCommun.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/stylePanier.css">
-    <link rel="stylesheet" href="css/styleConnexion.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
 </head>
 
 <body>
@@ -30,10 +27,10 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     // On charge le fichier XML contenant les produits
     $xml = simplexml_load_file('xml/produits.xml');
 
-    echo '<div class="listeProduits">';
+    echo '<div class="container">';
     // On parcourt chaque produit dans le fichier XML et on les affiche
     foreach ($xml->produit as $product) {
-        echo '<div class="produit">';
+        echo '<div class="card mb-3">';
         echo '<img src="' . htmlspecialchars($product->image) . '" alt="' . htmlspecialchars($product->nomProd) . '">';
         echo '<h2>' . htmlspecialchars($product->nomProd) . '</h2>';
         echo '<p class="prixProd">' . htmlspecialchars($product->prixProd) . ' €</p>';
