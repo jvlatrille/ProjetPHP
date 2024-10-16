@@ -1,9 +1,7 @@
 <?php
 function afficherHeader() {
-    // On vérifie si l'utilisateur est connecté
-    $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
-    // On récupère le nom d'utilisateur
-    $nomUtilisateur = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : '';
+    $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+    $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : '';
 
     echo '
     <header>
@@ -15,17 +13,20 @@ function afficherHeader() {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">Produits</a>
+                        </li>
                     </ul>
                     <form class="d-flex" action="search.php" method="get">
-                        <input class="form-control me-2" type="search" name="recherche" placeholder="Rechercher..." aria-label="Recherche">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher..." aria-label="Search">
                         <button class="btn btn-secondary" type="submit">Rechercher</button>
                     </form>
                 </div>';
 
-    if ($estConnecte) {
+    if ($isLoggedIn) {
         echo '
         <div class="d-flex align-items-center ms-4">
-            <span class="text-white me-3">Utilisateur : ' . $nomUtilisateur . '</span>
+            <span class="text-white me-3">Utilisateur : ' . $username . '</span>
             <a href="panier.php" class="me-3">
                 <img src="img/panier.png" alt="Panier" style="width: 40px; height: 40px;">
             </a>
@@ -41,16 +42,18 @@ function afficherHeader() {
         </nav>
     </header>';
 
-    // Si une erreur de connexion, on l'affiche
+    // Si une erreur de connexion est détectée
     if (isset($_SESSION['loginError'])) {
         echo '
-        <div class="alert alert-danger position-fixed bottom-0 end-0 m-3" role="alert">
-            Informations incorrectes !
+        <div id="errorPopup" class="alert alert-danger position-fixed top-50 start-50 translate-middle" role="alert" style="z-index: 9999; width: 300px; text-align: center; padding: 20px;">
+            <button type="button" class="btn-close float-end" aria-label="Close" onclick="closeErrorPopup()"></button>
+            <strong>Informations incorrectes !</strong><br>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Créer un compte ?</a>
         </div>
         <script>
-            setTimeout(function() {
-                document.querySelector(".alert").remove();
-            }, 3000); // Pop-up disparaît après 3 secondes
+            function closeErrorPopup() {
+                document.getElementById("errorPopup").remove();
+            }
         </script>';
         unset($_SESSION['loginError']); // On efface l'erreur après l'affichage
     }
@@ -90,15 +93,7 @@ function afficherFooter() {
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de passe</label>
                             <input type="password" class="form-control" id="password" name="password" required>
-                        </div>';
-
-    // Vérifier si une erreur de connexion est définie
-    if (isset($_SESSION['loginError'])) {
-        echo '<div class="alert alert-danger">Informations erronées. <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Créer un compte ?</a></div>';
-        unset($_SESSION['loginError']); // Erreur effacée après affichage
-    }
-
-    echo '
+                        </div>
                         <button type="submit" class="btn btn-primary">Se connecter</button>
                     </form>
                 </div>
