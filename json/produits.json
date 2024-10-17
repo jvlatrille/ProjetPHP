@@ -4,115 +4,176 @@
         "nomProd": "Saucisson",
         "prixProd": 10.99,
         "image": "img/saucisson.png",
-        "description": "Tout est bon dans le cochon"
+        "description": "Tout est bon dans le cochon",
+        "douceur": 60
       },
       {
         "nomProd": "Loutre",
         "prixProd": 9999999.99,
         "image": "img/Loutre.jpg",
-        "description": "C'est mignon donc c'est cher"
+        "description": "C'est mignon donc c'est cher",
+        "douceur": 100
       },
       {
         "nomProd": "Kiki",
         "prixProd": -9.99,
         "image": "img/kiki.jpg",
-        "description": "On en veut plus, prennez le"
+        "description": "On en veut plus, prennez le",
+        "douceur": 0
       },
       {
         "nomProd": "Sinje",
         "prixProd": 999.99,
         "image": "img/Singe.jpg",
-        "description": "Le plus bô, mais moins mignon que la loutre"
+        "description": "Le plus bô, mais moins mignon que la loutre",
+        "douceur": 40
       },
       {
         "nomProd": "Steech",
         "prixProd": 12.99,
         "image": "img/stitch.jpg",
-        "description": "Aloha signifie famille, famille signifie qu'on ne doit laisser personne de côté"
+        "description": "Aloha signifie famille, famille signifie qu'on ne doit laisser personne de côté",
+        "douceur":75
       },
       {
-        "nomProd": "ted",
+        "nomProd": "Ted",
         "prixProd": 15.99,
         "image": "img/teddyBear.jpg",
-        "description": "un ours ou un homme ?"
+        "description": "un ours ou un homme ?",
+        "douceur": 60
       },
       {
         "nomProd": "phrygette",
         "prixProd": 78.99,
         "image": "img/phrygette.jpg",
-        "description": "La république c'est moi"
+        "description": "La république c'est moi",
+        "douceur": 30
       },
       {
         "nomProd": "babar",
         "prixProd": 154.99,
         "image": "img/babar.jpg",
-        "description": "tema la trompe"
+        "description": "tema la trompe",
+        "douceur": 79
       },
       {
         "nomProd": "pikachou",
         "prixProd": 97.99,
         "image": "img/pikapika.jpg",
-        "description": "pika pika pikachou"
+        "description": "pika pika pikachou",
+        "douceur": 47
       },
       {
         "nomProd": "evolition",
         "prixProd": 45.99,
         "image": "img/evoli.jpg",
-        "description": "thers's a squirrell in my pants"
+        "description": "thers's a squirrell in my pants",
+        "douceur": 84
       },
       {
         "nomProd": "totu",
         "prixProd": 78.99,
         "image": "img/totu.jpg",
-        "description": "c'est franklin mais dans l'eau"
+        "description": "c'est franklin mais dans l'eau",
+        "douceur": 63
       },
       {
         "nomProd": "drago",
         "prixProd": 999.99,
         "image": "img/drago.jpg",
-        "description": "feu"
+        "description": "feu",
+        "douceur": 35
       },
       {
         "nomProd": "taco",
         "prixProd": 785.99,
         "image": "img/taco.jpg",
-        "description": "miam miam"
+        "description": "miam miam",
+        "douceur": 87
       },
       {
         "nomProd": "Xi Jingping",
         "prixProd": 8338.99,
         "image": "img/XiJingping.png",
-        "description": "+ 99999 Social Credits"
+        "description": "+ 99999 Social Credits",
+        "douceur": 11
       },
       {
         "nomProd": "Путин",
         "prixProd": 6487.99,
         "image": "img/Putin.jpg",
-        "description": "Mother Russia"
+        "description": "Mother Russia",
+        "douceur": 100
       },
       {
         "nomProd": "Président Français",
         "prixProd": 49.03,
         "image": "img/Macron.jpg",
-        "description": "C'est de la podre de Perlinpinpin"
+        "description": "C'est de la podre de Perlinpinpin",
+        "douceur": 0
       },
       {
         "nomProd": "Donald",
         "prixProd": 8723872.99,
         "image": "img/Trump.jpg",
-        "description": "Make America great again"
+        "description": "Make America great again",
+        "douceur": 41
       },
       {
         "nomProd": "Miata :D",
         "prixProd": 32140,
         "image": "img/Miata.png",
-        "description": "Elle fait vroum vroum"
+        "description": "Elle fait vroum vroum",
+        "douceur": 89
       },
       {
         "nomProd": "Stephane",
         "prixProd": 10000000,
         "image": "img/Stephane.jpg",
-        "description": "S'est échappé d'Hego Berria"
+        "description": "S'est échappé d'Hego Berria",
+        "douceur": 99
+      },
+      {
+        "nomProd": "broco",
+        "prixProd": 8,
+        "image": "img/broco.jpg",
+        "description": "beurk",
+        "douceur": 49
+      },
+      {
+        "nomProd": "dagon",
+        "prixProd": 77,
+        "image": "img/dagon.jpg",
+        "description": "so Kawaine",
+        "douceur": 66
+      },
+      {
+        "nomProd": "Lapinou",
+        "prixProd": 65,
+        "image": "img/lapinou.jpg",
+        "description": "Fait un bond en avant puis deux bond en arrière, regarde ton partenaire dans les yeux gentiment",
+        "douceur": 87
+      },
+      {
+        "nomProd": "Tigrou",
+        "prixProd": 12,
+        "image": "img/tigrou.png",
+        "description": "grrrr",
+        "douceur": 22
+      },
+      {
+        "nomProd": "Chipy",
+        "prixProd": 23,
+        "image": "img/chipy.jpg",
+        "description": "C'est lui qui a choisi",
+        "douceur": 8
+      },
+      {
+        "nomProd": "Big Fish",
+        "prixProd": 45,
+        "image": "img/grosPoisson.jpg",
+        "description": "Je veux aller à Quick, j'ai envie d'un burger",
+        "douceur": 99
       }
     ]
   }

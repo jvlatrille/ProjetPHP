@@ -32,7 +32,7 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
         // On vérifie que la clé "produits" existe et que c'est bien un tableau
         if (isset($donnees['produits']) && is_array($donnees['produits'])) {
-            echo '<div class="row">';
+            echo '<div class="row row-cols-1 row-cols-md-5 g-4">';
 
             // On parcourt chaque produit et on les affiche
             foreach ($donnees['produits'] as $produit) {
@@ -40,15 +40,20 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                 $prixProduit = isset($produit['prixProd']) ? htmlspecialchars($produit['prixProd']) : '0.00';
                 $image = isset($produit['image']) ? htmlspecialchars($produit['image']) : 'img/default.png';
                 $description = isset($produit['description']) ? htmlspecialchars($produit['description']) : 'Pas de description';
+                $douceur = isset($produit['douceur']) ? htmlspecialchars($produit['douceur']) : 0;
 
                 echo '
-                <div class="col-md-4">
+                <div class="col">
                     <div class="card mb-4 shadow-sm">
                         <img src="' . $image . '" class="card-img-top" alt="' . $nomProduit . '">
                         <div class="card-body">
                             <h5 class="card-title">' . $nomProduit . '</h5>
                             <p class="card-text">' . $description . '</p>
-                            <p class="card-text"><strong>' . $prixProduit . ' €</strong></p>';
+                            <p class="card-text"><strong>' . $prixProduit . ' €</strong></p>
+                            <p class="card-title">Niveau de douceur : </p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: ' . $douceur . '%" aria-valuenow="' . $douceur . '" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>';
 
                 // On vérifie si le produit est déjà dans le panier
                 $produitAjoute = false;
