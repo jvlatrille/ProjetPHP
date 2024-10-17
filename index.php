@@ -19,12 +19,13 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 </head>
 
 <body>
-    <?php afficherHeader();?>
+    <?php afficherHeader(); ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Vente de peluches</h1>
         <p class="text-center">Plein plein de pitites pilouches à vendre</p>
 
+        <!-- Affichage des produits existants -->
         <?php
         // On charge le fichier JSON contenant les produits
         $fichierJson = file_get_contents('json/produits.json');
@@ -101,12 +102,59 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
         }
         ?>
 
+        <!-- Formulaire pour ajouter un produit si l'utilisateur est connecté -->
+        <?php if ($estConnecte): ?>
+            <div class="col mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Créer un nouveau produit</h5>
+                        <form method="post" action="creer_produit.php" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nomProd" class="form-label">Nom du produit</label>
+                                <input type="text" class="form-control" id="nomProd" name="nomProd" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="prixProd" class="form-label">Prix du produit (€)</label>
+                                <input type="number" step="0.01" class="form-control" id="prixProd" name="prixProd" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Image du produit</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                                <img id="imagePreview" src="#" alt="Aperçu de l'image" style="display:none; margin-top:10px; max-width:100px; max-height:100px;">
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="douceur" class="form-label">Niveau de douceur</label>
+                                <input type="range" class="form-range" id="douceur" name="douceur" min="0" max="100" value="50">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Créer le produit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
     </div>
 
-    <?php afficherFooter();?>
+    <?php afficherFooter(); ?>
 
     <!-- Un peu de JS pour la magie Bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script pour prévisualiser l'image -->
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </body>
 
 </html>
