@@ -65,17 +65,6 @@ $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
                                 <div class="progress-bar" role="progressbar" style="width: ' . $douceur . '%" aria-valuenow="' . $douceur . '" aria-valuemin="0" aria-valuemax="100"></div>
                             </div><br>';
 
-                // Ajouter le bouton de suppression pour root
-                if ($estRoot) {
-                    echo '
-                    <form method="post" action="suppression_produit.php">
-                        <input type="hidden" name="nomProd" value="' . htmlspecialchars($nomProduit) . '">
-                        <button type="submit" class="btn btn-danger w-100">
-                            Supprimer le produit
-                        </button>
-                    </form> <br>';
-                }
-
                 // On ajoute le bouton "Ajouter au panier" pour tout utilisateur connecté
                 if ($estConnecte) {
                     // On vérifie si le produit est déjà dans le panier
@@ -104,11 +93,22 @@ $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
                         echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
                         echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
                         echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
-                        echo '</form>';
+                        echo '</form> <br>';
                     }
                 } else {
                     // Si l'utilisateur n'est pas connecté
                     echo '<p class="text-danger">Connectez-vous pour ajouter au panier</p>';
+                }
+
+                // Ajouter le bouton de suppression pour root
+                if ($estRoot) {
+                    echo '
+                    <form method="post" action="suppression_produit.php">
+                        <input type="hidden" name="nomProd" value="' . htmlspecialchars($nomProduit) . '">
+                        <button type="submit" class="btn btn-danger w-100">
+                            Supprimer le produit
+                        </button>
+                    </form>';
                 }
 
                 echo '
