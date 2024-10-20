@@ -27,6 +27,10 @@
         {
             "username": "1234",
             "password": "$2y$10$uHwEDKIPZEqjRx9cO.HG5eWwFcTOqh.ctx093PqAtE6d6OuHX.6yK"
+        },
+        {
+            "username": "a",
+            "password": "$2y$10$OpSQbVQTMO\/NWd3fQYAjnuiyEdDqxBOnvs9fwAcMUwudQbgEkKZHK"
         }
     ]
 }

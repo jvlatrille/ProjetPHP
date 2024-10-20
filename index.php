@@ -3,8 +3,11 @@ include 'commun.php';
 include 'redimensionner_image.php';
 session_start();
 
-// On vérifie si l'utilisateur est connecté (genre selon l'affichage des infos s'il est connecté ou pas)
+// On vérifie si l'utilisateur est connecté
 $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+
+// On vérifie si l'utilisateur est root (tu dois avoir défini 'username' dans la session lors de la connexion)
+$estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +53,9 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                 echo '
                 <div class="col">
                     <div class="card mb-4 shadow-sm">
-                        <img src="' . $imageVignette . '" class="card-img-top" alt="' . $nomProduit . '">
+                        <a href="details_produit.php?nomProd=' . urlencode($nomProduit) . '">
+                            <img src="' . $imageVignette . '" class="card-img-top" alt="' . $nomProduit . '">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title">' . $nomProduit . '</h5>
                             <p class="card-text">' . $description . '</p>
@@ -106,8 +111,8 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
         }
         ?>
 
-        <!-- Formulaire pour ajouter un produit si l'utilisateur est connecté -->
-        <?php if ($estConnecte): ?>
+        <!-- Formulaire pour ajouter un produit, uniquement disponible pour l'utilisateur root -->
+        <?php if ($estConnecte && $estRoot): ?>
             <div class="col mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
