@@ -6,7 +6,7 @@ session_start();
 // On vérifie si l'utilisateur est connecté
 $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
-// On vérifie si l'utilisateur est root (tu dois avoir défini 'username' dans la session lors de la connexion)
+// On vérifie si l'utilisateur est root
 $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
 ?>
 
@@ -65,30 +65,41 @@ $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
                                 <div class="progress-bar" role="progressbar" style="width: ' . $douceur . '%" aria-valuenow="' . $douceur . '" aria-valuemin="0" aria-valuemax="100"></div>
                             </div><br>';
 
-                // On vérifie si le produit est déjà dans le panier
-                $produitAjoute = false;
-                $quantiteProduit = 0;
-
-                if ($estConnecte && isset($_SESSION['panier'])) {
-                    foreach ($_SESSION['panier'] as $item) {
-                        if ($item['nomProd'] === $produit['nomProd']) {
-                            $produitAjoute = true;
-                            $quantiteProduit = $item['quantite'];
-                            break;
-                        }
-                    }
+                // Ajouter le bouton de suppression pour root
+                if ($estRoot) {
+                    echo '
+                    <form method="post" action="suppression_produit.php">
+                        <input type="hidden" name="nomProd" value="' . htmlspecialchars($nomProduit) . '">
+                        <button type="submit" class="btn btn-danger w-100">
+                            Supprimer le produit
+                        </button>
+                    </form> <br>';
                 }
 
+                // On ajoute le bouton "Ajouter au panier" pour tout utilisateur connecté
                 if ($estConnecte) {
+                    // On vérifie si le produit est déjà dans le panier
+                    $produitAjoute = false;
+                    $quantiteProduit = 0;
+
+                    if (isset($_SESSION['panier'])) {
+                        foreach ($_SESSION['panier'] as $item) {
+                            if ($item['nomProd'] === $produit['nomProd']) {
+                                $produitAjoute = true;
+                                $quantiteProduit = $item['quantite'];
+                                break;
+                            }
+                        }
+                    }
+
+                    // Affichage du bouton "Ajouter au panier"
                     if ($produitAjoute) {
-                        // Si le produit est déjà dans le panier, on propose d'en ajouter plus
                         echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', ' . $quantiteProduit . ')">';
                         echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
                         echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
                         echo '<button type="submit" class="btn btn-primary w-100">Ajouter ? (' . $quantiteProduit . ')</button>';
                         echo '</form>';
                     } else {
-                        // Si le produit n'est pas encore dans le panier, on affiche le bouton "Ajouter"
                         echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', 0)">';
                         echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
                         echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
@@ -110,41 +121,6 @@ $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
             echo '<p>Aucun produit disponible pour le moment, dommage...</p>';
         }
         ?>
-
-        <!-- Formulaire pour ajouter un produit, uniquement disponible pour l'utilisateur root -->
-        <?php if ($estConnecte && $estRoot): ?>
-            <div class="col mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Créer un nouveau produit</h5>
-                        <form method="post" action="creer_produit.php" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="nomProd" class="form-label">Nom du produit</label>
-                                <input type="text" class="form-control" id="nomProd" name="nomProd" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="prixProd" class="form-label">Prix du produit (€)</label>
-                                <input type="number" step="0.01" class="form-control" id="prixProd" name="prixProd" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="image" class="form-label">Image du produit</label>
-                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
-                                <img id="imagePreview" src="#" alt="Aperçu de l'image" style="display:none; margin-top:10px; max-width:100px; max-height:100px;">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="douceur" class="form-label">Niveau de douceur</label>
-                                <input type="range" class="form-range" id="douceur" name="douceur" min="0" max="100" value="50">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Créer le produit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
 
     </div>
 

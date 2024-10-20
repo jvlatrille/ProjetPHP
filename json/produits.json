@@ -172,7 +172,7 @@
             "nomProd": "Turbo l'escargo",
             "prixProd": 80,
             "image": "img\/turbo.jpg",
-            "description": "Les Parisiens ne pourront pas l'attraper pour le manger celui là",
+            "description": "Les Parisiens ne pourront pas l'attraper pour le manger celui l\u00e0",
             "douceur": 45
         },
         {
@@ -181,15 +181,13 @@
             "image": "img\/avocado.jpg",
             "description": "Guacamole",
             "douceur": 68
-        }
-        ,
+        },
         {
-            "nomProd": "Avocado",
-            "prixProd": 65,
+            "nomProd": "Peach",
+            "prixProd": 34,
             "image": "img\/peach.jpg",
             "description": "Mangez 5 fruits et l\u00e9gumes par jour",
             "douceur": 88
-        }
-        
+        }        
     ]
 }
