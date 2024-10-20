@@ -162,13 +162,6 @@
             "douceur": 22
         },
         {
-            "nomProd": "Chipy",
-            "prixProd": 23,
-            "image": "img\/chipy.jpg",
-            "description": "C'est lui qui a choisi",
-            "douceur": 8
-        },
-        {
             "nomProd": "Big Fish",
             "prixProd": 45,
             "image": "img\/grosPoisson.jpg",
@@ -176,11 +169,27 @@
             "douceur": 99
         },
         {
-            "nomProd": "test",
-            "prixProd": 176,
-            "image": "img\/118276.jpg",
-            "description": "nan",
-            "douceur": 50
+            "nomProd": "Turbo l'escargo",
+            "prixProd": 80,
+            "image": "img\/turbo.jpg",
+            "description": "Les Parisiens ne pourront pas l'attraper pour le manger celui là",
+            "douceur": 45
+        },
+        {
+            "nomProd": "Avocado",
+            "prixProd": 12,
+            "image": "img\/avocado.jpg",
+            "description": "Guacamole",
+            "douceur": 68
         }
+        ,
+        {
+            "nomProd": "Avocado",
+            "prixProd": 65,
+            "image": "img\/peach.jpg",
+            "description": "Mangez 5 fruits et l\u00e9gumes par jour",
+            "douceur": 88
+        }
+        
     ]
 }

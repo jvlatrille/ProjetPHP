@@ -1,5 +1,6 @@
 <?php
 include 'commun.php';
+include 'redimensionner_image.php';
 session_start();
 
 // On vérifie si l'utilisateur est connecté (genre selon l'affichage des infos s'il est connecté ou pas)
@@ -43,10 +44,13 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                 $description = isset($produit['description']) ? htmlspecialchars($produit['description']) : 'Pas de description';
                 $douceur = isset($produit['douceur']) ? htmlspecialchars($produit['douceur']) : 0;
 
+                // Générer ou récupérer la vignette de l'image
+                $imageVignette = creerVignetteSiNecessaire($image);
+
                 echo '
                 <div class="col">
                     <div class="card mb-4 shadow-sm">
-                        <img src="' . $image . '" class="card-img-top" alt="' . $nomProduit . '">
+                        <img src="' . $imageVignette . '" class="card-img-top" alt="' . $nomProduit . '">
                         <div class="card-body">
                             <h5 class="card-title">' . $nomProduit . '</h5>
                             <p class="card-text">' . $description . '</p>
@@ -54,7 +58,7 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
                             <p class="card-title">Niveau de douceur : </p>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" style="width: ' . $douceur . '%" aria-valuenow="' . $douceur . '" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>';
+                            </div><br>';
 
                 // On vérifie si le produit est déjà dans le panier
                 $produitAjoute = false;
@@ -143,18 +147,6 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
     <!-- Un peu de JS pour la magie Bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script pour prévisualiser l'image -->
-    <script>
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var output = document.getElementById('imagePreview');
-                output.src = reader.result;
-                output.style.display = 'block';
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    </script>
 </body>
 
 </html>
