@@ -1,4 +1,5 @@
 <?php
+// Inclusion des fichiers nécessaires
 include 'commun.php';
 include 'redimensionner_image.php';
 session_start();
@@ -8,6 +9,38 @@ $estConnecte = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
 // On vérifie si l'utilisateur est root
 $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
+
+// Ajouter un produit au panier
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nomProd']) && isset($_POST['prixProd'])) {
+    $nomProduit = $_POST['nomProd'];
+    $prixProduit = (float)$_POST['prixProd'];
+
+    // Si le panier n'existe pas, on le crée
+    if (!isset($_SESSION['panier'])) {
+        $_SESSION['panier'] = [];
+    }
+
+    $produitAjoute = false;
+
+    // Parcourir le panier pour voir si le produit est déjà présent
+    foreach ($_SESSION['panier'] as &$article) {
+        if ($article['nomProd'] === $nomProduit) {
+            // Si le produit est déjà dans le panier, on augmente la quantité
+            $article['quantite'] += 1;
+            $produitAjoute = true;
+            break;
+        }
+    }
+
+    // Si le produit n'est pas encore dans le panier, on l'ajoute
+    if (!$produitAjoute) {
+        $_SESSION['panier'][] = [
+            'nomProd' => $nomProduit,
+            'prixProd' => $prixProduit,
+            'quantite' => 1
+        ];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -67,36 +100,12 @@ $estRoot = isset($_SESSION['username']) && $_SESSION['username'] === 'root';
 
                 // On ajoute le bouton "Ajouter au panier" pour tout utilisateur connecté
                 if ($estConnecte) {
-                    // On vérifie si le produit est déjà dans le panier
-                    $produitAjoute = false;
-                    $quantiteProduit = 0;
-
-                    if (isset($_SESSION['panier'])) {
-                        foreach ($_SESSION['panier'] as $item) {
-                            if ($item['nomProd'] === $produit['nomProd']) {
-                                $produitAjoute = true;
-                                $quantiteProduit = $item['quantite'];
-                                break;
-                            }
-                        }
-                    }
-
-                    // Affichage du bouton "Ajouter au panier"
-                    if ($produitAjoute) {
-                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', ' . $quantiteProduit . ')">';
-                        echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
-                        echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
-                        echo '<button type="submit" class="btn btn-primary w-100">Ajouter ? (' . $quantiteProduit . ')</button>';
-                        echo '</form>';
-                    } else {
-                        echo '<form method="post" action="index.php" onsubmit="return ajouterAuPanier(event, \'' . $nomProduit . '\', ' . $prixProduit . ', 0)">';
-                        echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
-                        echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
-                        echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
-                        echo '</form> <br>';
-                    }
+                    echo '<form method="post" action="index.php">';
+                    echo '<input type="hidden" name="nomProd" value="' . $nomProduit . '">';
+                    echo '<input type="hidden" name="prixProd" value="' . $prixProduit . '">';
+                    echo '<button type="submit" class="btn btn-success w-100">Ajouter au panier</button>';
+                    echo '</form><br>';
                 } else {
-                    // Si l'utilisateur n'est pas connecté
                     echo '<p class="text-danger">Connectez-vous pour ajouter au panier</p>';
                 }
 

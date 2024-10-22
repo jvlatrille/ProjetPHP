@@ -7,6 +7,32 @@ if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = [];
 }
 
+// Si une demande d'ajout de produit au panier a été faite
+if (isset($_POST['nomProd'])) {
+    $nomProduit = $_POST['nomProd'];
+    $prixProduit = (float)$_POST['prixProd'];
+
+    // On cherche dans le panier si ce produit existe déjà
+    $produitExisteDeja = false;
+    foreach ($_SESSION['panier'] as &$produit) {
+        if ($produit['nomProd'] === $nomProduit) {
+            $produit['quantite'] += 1; // Si le produit existe déjà, on augmente la quantité
+            $produitExisteDeja = true;
+            break;
+        }
+    }
+    unset($produit); // Libérer la référence
+
+    // Si le produit n'existe pas encore dans le panier, on l'ajoute
+    if (!$produitExisteDeja) {
+        $_SESSION['panier'][] = [
+            'nomProd' => $nomProduit,
+            'prixProd' => $prixProduit,
+            'quantite' => 1
+        ];
+    }
+}
+
 // Si ya une demande de retrait d'un produit
 if (isset($_POST['retirerProd'])) {
     $nomProduit = $_POST['retirerProd']; // Récupérer le nom du produit à retirer
@@ -24,6 +50,10 @@ if (isset($_POST['retirerProd'])) {
             break;
         }
     }
+    unset($article); // Libérer la référence
+
+    // Réindexer le tableau après suppression d'un produit
+    $_SESSION['panier'] = array_values($_SESSION['panier']);
 }
 ?>
 
@@ -40,12 +70,14 @@ if (isset($_POST['retirerProd'])) {
 
 <body>
 
-    <?php afficherHeader(); // Affichage du header ?>
+    <?php afficherHeader(); // Affichage du header 
+    ?>
 
     <div class="container mt-4">
         <h1 class="text-center">Votre Panier</h1>
 
-        <?php if (!empty($_SESSION['panier'])): // Si le panier n'est pas vide ?>
+        <?php if (!empty($_SESSION['panier'])): // Si le panier n'est pas vide 
+        ?>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
@@ -57,7 +89,8 @@ if (isset($_POST['retirerProd'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($_SESSION['panier'] as $article): // Parcourir chaque produit du panier ?>
+                        <?php foreach ($_SESSION['panier'] as $article): // Parcourir chaque produit du panier 
+                        ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($article['nomProd']); ?></td>
                                 <td><?php echo number_format($article['prixProd'], 2); ?> €</td>
@@ -75,7 +108,7 @@ if (isset($_POST['retirerProd'])) {
             </div>
 
             <div class="mt-4">
-                <h3>Total : 
+                <h3>Total :
                     <span class="text-success">
                         <?php
                         $total = 0;
@@ -98,7 +131,7 @@ if (isset($_POST['retirerProd'])) {
         </div>
     </div>
 
-    <?php afficherFooter();?>
+    <?php afficherFooter(); ?>
 
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
