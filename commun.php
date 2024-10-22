@@ -1,5 +1,6 @@
 <?php
-function afficherHeader() {
+function afficherHeader()
+{
     $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : '';
 
@@ -59,8 +60,26 @@ function afficherHeader() {
     }
 }
 
-function afficherFooter() {
+function afficherFooter()
+{
     echo '
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            flex-grow: 1;
+        }
+        footer {
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+
     <!-- Footer -->
     <footer class="bg-primary text-white py-3 mt-auto">
         <div class="container">
@@ -167,4 +186,3 @@ function afficherFooter() {
         </div>
     </div>';
 }
-?>
