@@ -117,6 +117,8 @@ if (isset($_POST['retirerProd'])) {
                             $total += $produit['prixProd'] * $produit['quantite'];
                         }
                         echo number_format($total, 2);
+
+                        $_SESSION['total_panier'] = $total;
                         ?> €
                     </span>
                 </h3>
@@ -128,6 +130,7 @@ if (isset($_POST['retirerProd'])) {
 
         <div class="text-center mt-4">
             <a href="index.php" class="btn btn-success">Continuer vos achats</a>
+            <a href="paiement.php" class="btn btn-success">Procéder au paiement</a>
         </div>
     </div>
 
