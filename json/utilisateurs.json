@@ -1,32 +1,16 @@
 {
     "utilisateurs": [
         {
-            "username": "oui",
-            "password": "$2y$10$B5OMH2A.6dGFEWq9facS7.szx9Pq6N.RQLHfGAWK739\/z4g7AoagS"
-        },
-        {
             "username": "root",
             "password": "$2y$10$bspGGZySQoIlm4b3TQ7oKeOeZAPHsl\/G6hyxhQapWc5DpBEzoU4K2"
-        },
-        {
-            "username": "aaa",
-            "password": "$2y$10$XI1KCuB.3OLNT4zfG4XxvOC.c9acZ70YbOs2T\/Ag2ba78K1FWmHhW"
         },
         {
             "username": "tatiTatou",
             "password": "$2y$10$u5cRHYCgjnPXGFnllbKnRu8O5jUQoJzstWDbzZb19CLx3wUjy0Qw."
         },
         {
-            "username": "t",
-            "password": "$2y$10$Xz5wLlxQHqNDmEe3UeaK..7f1CTBKMfr7ikHSFuk4PFwL84GGd0sW"
-        },
-        {
             "username": "r",
             "password": "$2y$10$3Hla\/am3.ihhXQ3TsLPD3upNsMD9cI304Z2I5RcORqEmTBrD1IFD."
-        },
-        {
-            "username": "1234",
-            "password": "$2y$10$uHwEDKIPZEqjRx9cO.HG5eWwFcTOqh.ctx093PqAtE6d6OuHX.6yK"
         },
         {
             "username": "a",
@@ -35,10 +19,6 @@
         {
             "username": "user",
             "password": "$2y$10$hCLGwyy.dV2YilkiCfyI.eneitfcFxe9Gj3.YriGPuuB7llevZBE."
-        },
-        {
-            "username": "123",
-            "password": "$2y$10$ILz8EL323xb.3O636lecLuFSbJMdZ1Q7gjFRtJPaGlmkVnNXUOI2a"
         }
     ]
 }
