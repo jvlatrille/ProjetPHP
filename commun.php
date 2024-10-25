@@ -18,10 +18,11 @@ function afficherHeader()
                             <a class="nav-link text-white" href="#">Produits</a>
                         </li>
                     </ul>
-                    <form class="d-flex" action="search.php" method="get">
-                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher..." aria-label="Search">
-                        <button class="btn btn-secondary" type="submit">Rechercher</button>
-                    </form>
+                    <form class="d-flex" action="index.php" method="get">
+    <input class="form-control me-2" type="search" name="query" placeholder="Rechercher..." aria-label="Search">
+    <button class="btn btn-secondary" type="submit">Rechercher</button>
+</form>
+
                 </div>';
 
     if ($isLoggedIn) {
