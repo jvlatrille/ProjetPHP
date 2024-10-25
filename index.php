@@ -129,6 +129,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nomProd']) && isset($
             echo '<p>Aucun produit disponible pour le moment, dommage...</p>';
         }
         ?>
+        <?php if ($estRoot): ?>
+            <div class="col mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Créer un nouveau produit</h5>
+                        <form method="post" action="creer_produit.php" enctype="multipart/form-data">
+                            <input type="hidden" name="creerProduit" value="1">
+                            <div class="mb-3">
+                                <label for="nomProd" class="form-label">Nom du produit</label>
+                                <input type="text" class="form-control" id="nomProd" name="nomProd" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="prixProd" class="form-label">Prix du produit (€)</label>
+                                <input type="number" step="0.01" class="form-control" id="prixProd" name="prixProd" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Image du produit</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="douceur" class="form-label">Niveau de douceur</label>
+                                <input type="range" class="form-range" id="douceur" name="douceur" min="0" max="100" value="50">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Créer le produit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php afficherFooter(); ?>

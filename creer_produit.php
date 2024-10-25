@@ -63,63 +63,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetFile = $targetDir . basename($_FILES["image"]["name"]);
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-        // Vérification du type de fichier
-        $check = getimagesize($_FILES["image"]["tmp_name"]);
-        if ($check !== false) {
-            // Vérifier si le fichier existe déjà
-            if (file_exists($targetFile)) {
-                echo "Désolé, l'image existe déjà.";
-            } else {
-                // Limitation de la taille de l'image (par exemple 5Mo max)
-                if ($_FILES["image"]["size"] > 5000000) {
-                    echo "Désolé, l'image est trop volumineuse.";
+        // Vérification du téléchargement de l'image
+        if ($_FILES["image"]["tmp_name"] != '') {
+            // Vérification du type de fichier
+            $check = getimagesize($_FILES["image"]["tmp_name"]);
+            if ($check !== false) {
+                // Vérifier si le fichier existe déjà
+                if (file_exists($targetFile)) {
+                    echo "Désolé, l'image existe déjà.";
                 } else {
-                    // Autoriser certains formats d'images
-                    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-                        echo "Désolé, seuls les fichiers JPG, JPEG et PNG sont autorisés.";
+                    // Limitation de la taille de l'image (par exemple 5Mo max)
+                    if ($_FILES["image"]["size"] > 5000000) {
+                        echo "Désolé, l'image est trop volumineuse.";
                     } else {
-                        // Si tout est bon, déplacer l'image principale
-                        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-                            
-                            // Créer une vignette
-                            $fichierVignette = $targetDir . 'vignette_' . basename($_FILES["image"]["name"]);
-                            creerVignette($targetFile, $fichierVignette, 100, 100); // Redimensionner à 100x100 pixels
-
-                            // Ajouter le produit dans le fichier JSON
-                            $produitsJson = file_get_contents('json/produits.json');
-                            $produitsArray = json_decode($produitsJson, true);
-
-                            $nouveauProduit = [
-                                'nomProd' => $nomProd,
-                                'prixProd' => $prixProd,
-                                'image' => $fichierVignette, // Utiliser la vignette à la place de l'image principale
-                                'description' => $description,
-                                'douceur' => $douceur
-                            ];
-
-                            // Ajouter le nouveau produit à la liste
-                            $produitsArray['produits'][] = $nouveauProduit;
-
-                            // Sauvegarder le fichier JSON
-                            if (file_put_contents('json/produits.json', json_encode($produitsArray, JSON_PRETTY_PRINT))) {
-                                echo "Produit ajouté avec succès.";
-                                header('Location: index.php');
-                                exit();
-                            } else {
-                                echo "Désolé, une erreur s'est produite lors de l'enregistrement du produit.";
-                            }
+                        // Autoriser certains formats d'images
+                        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                            echo "Désolé, seuls les fichiers JPG, JPEG et PNG sont autorisés.";
                         } else {
-                            echo "Désolé, une erreur s'est produite lors du téléchargement de l'image.";
+                            // Si tout est bon, déplacer l'image principale
+                            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                                // Créer une vignette
+                                $fichierVignette = $targetDir . 'vignette_' . basename($_FILES["image"]["name"]);
+                                creerVignette($targetFile, $fichierVignette, 100, 100); // Redimensionner à 100x100 pixels
+
+                                // Ajouter le produit dans le fichier JSON
+                                $produitsJson = file_get_contents('json/produits.json');
+                                $produitsArray = json_decode($produitsJson, true);
+
+                                $nouveauProduit = [
+                                    'nomProd' => $nomProd,
+                                    'prixProd' => $prixProd,
+                                    'image' => $fichierVignette, // Utiliser la vignette à la place de l'image principale
+                                    'description' => $description,
+                                    'douceur' => $douceur
+                                ];
+
+                                // Ajouter le nouveau produit à la liste
+                                $produitsArray['produits'][] = $nouveauProduit;
+
+                                // Sauvegarder le fichier JSON
+                                if (file_put_contents('json/produits.json', json_encode($produitsArray, JSON_PRETTY_PRINT))) {
+                                    echo "Produit ajouté avec succès.";
+                                    header('Location: index.php');
+                                    exit();
+                                } else {
+                                    echo "Désolé, une erreur s'est produite lors de l'enregistrement du produit.";
+                                }
+                            } else {
+                                echo "Désolé, une erreur s'est produite lors du téléchargement de l'image.";
+                            }
                         }
                     }
                 }
+            } else {
+                echo "Le fichier sélectionné n'est pas une image.";
             }
         } else {
-            echo "Le fichier sélectionné n'est pas une image.";
+            echo "Aucune image n'a été téléchargée.";
         }
     } else {
         echo "Tous les champs sont requis.";
     }
 }
+
 
 ?>
