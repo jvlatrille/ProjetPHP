@@ -11,3 +11,7 @@ Pour accèder aux fonctionnalités, il faudra vous connecter :
 
 - Sois en tant que utilisateur : root, mdp : root
     Avec cet utilisateur root, vous pourrez supprimer ou ajouter (fonctionnalité en bas de la page) les produits du json depuis le site.
+
+
+Les fichiers : 
+Nous avons ajouté bootstrap pour le style, donc le dossier node_modules et les fichiers package-lock.json et package.json ne sont pas des parties importantes du projet (elles n'ont pas été codé par notre équipe).
