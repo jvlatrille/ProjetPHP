@@ -1,6 +1,7 @@
 <?php
 include 'commun.php';
 session_start();
+$total = 0;
 
 // Si le panier n'existe pas encore, on le crée (vide)
 if (!isset($_SESSION['panier'])) {
@@ -111,7 +112,6 @@ if (isset($_POST['retirerProd'])) {
                 <h3>Total :
                     <span class="text-success">
                         <?php
-                        $total = 0;
                         // On calcule le total du panier
                         foreach ($_SESSION['panier'] as $produit) {
                             $total += $produit['prixProd'] * $produit['quantite'];
@@ -129,8 +129,12 @@ if (isset($_POST['retirerProd'])) {
         <?php endif; ?>
 
         <div class="text-center mt-4">
+            
             <a href="index.php" class="btn btn-success">Continuer vos achats</a>
-            <a href="paiement.php" class="btn btn-success">Procéder au paiement</a>
+            <?php
+            if($total != 0){
+                echo '<a href="paiement.php" class="btn btn-success">Procéder au paiement</a>';}
+            ?>
         </div>
     </div>
 
